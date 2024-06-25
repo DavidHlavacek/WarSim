@@ -18,7 +18,7 @@ This project uses GitHub Actions to automate the build and release process. On e
 4. Run the JAR file using the following command:
    
    ```
-   java -jar WarSim.jar
+   java -jar WarSim-1.1.jar
    ```
    
 ## How to Run the Simulation
