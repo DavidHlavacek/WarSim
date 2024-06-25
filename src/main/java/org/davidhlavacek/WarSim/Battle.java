@@ -8,33 +8,37 @@ public class Battle {
 
     Army army1, army2;
     int rounds;
-    private Random random = new Random();
+    private Random random;
 
     private static final int SPECIAL_ABILITY_1 = 1;
     private static final int SPECIAL_ABILITY_2 = 2;
     private static final int SPECIAL_ABILITY_3 = 3;
     private static final int SPECIAL_ABILITY_4 = 4;
 
-    private static int SPECIAL_REFLECT_DAMAGE_MIN = 1;
-    private static int SPECIAL_REFLECT_DAMAGE_MAX = 15;
+    private static final int SPECIAL_REFLECT_DAMAGE_MIN = 1;
+    private static final int SPECIAL_REFLECT_DAMAGE_MAX = 15;
 
-    private static int SPECIAL_INVINCIBLE_ROUNDS_MIN = 5;
-    private static int SPECIAL_INVINCIBLE_ROUNDS_MAX = 15;
+    private static final int SPECIAL_INVINCIBLE_ROUNDS_MIN = 5;
+    private static final int SPECIAL_INVINCIBLE_ROUNDS_MAX = 15;
 
-    private static int SPECIAL_INCREASE_DAMAGE_ROUNDS_MIN = 5;
-    private static int SPECIAL_INCREASE_DAMAGE_ROUNDS_MAX = 15;
-    private static int SPECIAL_INCREASE_DAMAGE_MIN = 1;
-    private static int SPECIAL_INCREASE_DAMAGE_MAX = 5;
+    private static final int SPECIAL_INCREASE_DAMAGE_ROUNDS_MIN = 5;
+    private static final int SPECIAL_INCREASE_DAMAGE_ROUNDS_MAX = 15;
+    private static final int SPECIAL_INCREASE_DAMAGE_MIN = 1;
+    private static final int SPECIAL_INCREASE_DAMAGE_MAX = 5;
 
-    private static int SPECIAL_HEAL_MIN = 1;
-    private static int SPECIAL_HEAL_MAX = 15;
+    private static final int SPECIAL_HEAL_MIN = 1;
+    private static final int SPECIAL_HEAL_MAX = 15;
 
     // Constructor
     public Battle(Army army1, Army army2) {
+        this(army1, army2, new Random());
+    }
+
+    public Battle(Army army1, Army army2, Random random) {
         this.army1 = army1;
         this.army2 = army2;
         this.rounds = 0;
-
+        this.random = random;
     }
 
     // Getters
@@ -105,54 +109,31 @@ public class Battle {
     }
 
     public void duel(Creature first, Creature second) {
-        // Log information about the start of the duel
-        // LOGGER.info("Start round: " + this.rounds);
-        // logCreatureStats("First org.davidhlavacek.WarSim.Creature", first);
-        // logCreatureStats("Second org.davidhlavacek.WarSim.Creature", second);
-        // logCreatureStats("Initial Stats", first, second);
-
-        // Check if it's the 5th round and the first creature has special ability 3
         int rounds_for_invincibility_first = random.nextInt(SPECIAL_INVINCIBLE_ROUNDS_MAX
                 - SPECIAL_INVINCIBLE_ROUNDS_MIN + 1) + SPECIAL_INVINCIBLE_ROUNDS_MIN;
         boolean firstCreatureInvincible = (this.rounds % rounds_for_invincibility_first == 0 && first.getSpecial() == 3);
         if (this.check(first, second)) {
             if (!firstCreatureInvincible) {
-                // Simulate the first creature attacking the second creature
                 int specialChange = calculateSpecialChange(first);
                 first.attackEnemyCreature(second, specialChange);
-
-                // Log information after the first creature attacks
-                // logCreatureStats("After " + first.getName() + " attacks", first, second);
-
-                // Check if the second creature has died
                 if (!check(first, second)) {
-                    return; // If the second creature has died, exit the method
+                    return;
                 }
             }
         }
 
-        // Check if it's the 5th round and the second creature has special ability 3
         int rounds_for_invincibility_second = random.nextInt(SPECIAL_INVINCIBLE_ROUNDS_MAX
                 - SPECIAL_INVINCIBLE_ROUNDS_MIN + 1) + SPECIAL_INVINCIBLE_ROUNDS_MIN;
         boolean secondCreatureInvincible = (this.rounds % rounds_for_invincibility_second == 0
                 && second.getSpecial() == 3);
         if (this.check(first, second)) {
-
             if (!secondCreatureInvincible) {
-                // Simulate the second creature attacking the first creature
                 int specialChange = calculateSpecialChange(second);
                 second.attackEnemyCreature(first, specialChange);
-
-                // Log information after the second creature attacks
-                // logCreatureStats("After " + second.getName() + " attacks", first, second);
-
-                // Check if the first creature has died after the second attack
                 check(first, second);
             }
         }
-        // Increment rounds
         this.check(first, second);
-        // LOGGER.info("End round: " + this.rounds);
     }
 
     private int calculateSpecialChange(Creature creature) {
@@ -160,45 +141,26 @@ public class Battle {
         int creatureSpecial = creature.getSpecial();
 
         if (creatureSpecial == SPECIAL_ABILITY_1) {
-            // Apply special ability 1: Reflect between 1% and 15% of damage taken back
             specialChange = random.nextInt(SPECIAL_REFLECT_DAMAGE_MAX - SPECIAL_REFLECT_DAMAGE_MIN + 1)
                     + SPECIAL_REFLECT_DAMAGE_MIN;
-            specialChange = (int) (specialChange / 100.0 * creature.getEnemy().getDamage());
+            specialChange = (int) (specialChange / 100.0 * creature.getEnemy().getBaseDamage());
         } else if (creatureSpecial == SPECIAL_ABILITY_2) {
-            // Apply special ability 2: Every 5th round increase your damage by a random
-            // value between 1% and SPECIAL_INCREASE_DAMAGE_PERCENTAGE
             int rounds_for_increase_damage = random.nextInt(SPECIAL_INCREASE_DAMAGE_ROUNDS_MAX
                     - SPECIAL_INCREASE_DAMAGE_ROUNDS_MIN + 1) + SPECIAL_INCREASE_DAMAGE_ROUNDS_MIN;
             if (this.rounds % rounds_for_increase_damage == 0) {
                 int randomIncrease = random.nextInt(SPECIAL_INCREASE_DAMAGE_MAX - SPECIAL_INCREASE_DAMAGE_MIN + 1)
                         + SPECIAL_INCREASE_DAMAGE_MIN;
-                specialChange = (int) (randomIncrease / 100.0 * creature.getDamage());
+                specialChange = (int) (randomIncrease / 100.0 * creature.getBaseDamage());
             }
         } else if (creatureSpecial == SPECIAL_ABILITY_4) {
-            // Apply special ability 4: Heal for between 1% and 15% of damage done
             specialChange = random.nextInt(SPECIAL_HEAL_MAX - SPECIAL_HEAL_MIN + 1) + SPECIAL_HEAL_MIN;
-            specialChange = (int) (specialChange / 100.0 * (creature.getDamage() + specialChange));
+            specialChange = (int) (specialChange / 100.0 * (creature.getBaseDamage() + specialChange));
         }
 
         return specialChange;
     }
 
-    private void logCreatureStats(String message, Creature... creatures) {
-        for (Creature creature : creatures) {
-            StringBuilder stats = new StringBuilder(message + " - " + creature.getName() +
-                    " HP: " + creature.getHealth() +
-                    " | DMG: " + creature.getDamage() +
-                    " | Speed: " + creature.getSpeed() +
-                    " | Special: " + creature.getSpecial());
-        }
-    }
-
-
-
     public Army fight() {
-        // LOGGER.info("Starting fight between " + army1.getName() + " and " +
-        // army2.getName());
-
         while (!(army1.getCreatures().isEmpty()) && !(army2.getCreatures().isEmpty()) && getRounds() < 10000) {
             Creature randomCreatureArmy1 = getRandomCreatureArmy1();
             Creature randomCreatureArmy2 = getRandomCreatureArmy2();
@@ -221,26 +183,21 @@ public class Battle {
             this.duel(first, second);
 
             this.setRounds(getRounds() + 1);
-
         }
+
         Army winner = (army1.getSize() > army2.getSize()) ? army1 : army2;
-        System.out.println("\n\n------------" + "org.davidhlavacek.WarSim.Simulation " + Simulation.simulation++ + "------------\n");
+        System.out.println("\n\n------------" + "Simulation " + Simulation.simulation++ + "------------\n");
         System.out.println("\tWinner: " + winner.getName());
         System.out.println("\tRounds: " + this.getRounds());
         int count = 0;
         System.out.println("\n\n\t   Alive: \n");
         for (Creature creature : winner.getCreatures()) {
             System.out.println("\t" + creature.getName() + " | HP: " + creature.getHealth());
-
             count++;
         }
         System.out.println("\n\tTotal: " + count);
         System.out.println("\n-----------------------------------------\n\n");
-        // LOGGER.info("Finished fight between " + army1.getName() + " and " +
-        // army2.getName());
 
         return winner;
-
     }
-
 }

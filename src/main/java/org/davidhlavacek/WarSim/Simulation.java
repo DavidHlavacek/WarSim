@@ -12,30 +12,27 @@ public class Simulation {
     public static int type = 0;
 
     public Simulation(Battle battle, int repetition) {
-
         for (int i = 0; i < repetition; i++) {
+            Random random = new Random(System.currentTimeMillis());
 
             this.army1 = new Army(battle.getArmy1().getName());
             this.army2 = new Army(battle.getArmy2().getName());
 
             for (Creature creature : battle.getArmy1().getCreatures()) {
-                Creature copy = new Creature(creature.getName(), creature.getHealth(),
-                        creature.getDamage(), creature.getSpeed(),
-                        creature.getSpecial(), creature.getType());
+                Creature copy = new Creature(creature.getName(), creature.getHealth(), creature.getBaseDamage(),
+                        creature.getSpeed(), creature.getSpecial(), creature.getType());
                 copy.setArmy(this.army1);
                 this.army1.addCreature(copy);
             }
 
             for (Creature creature : battle.getArmy2().getCreatures()) {
-                Creature copy = new Creature(creature.getName(), creature.getHealth(),
-                        creature.getDamage(), creature.getSpeed(),
-                        creature.getSpecial(), creature.getType());
+                Creature copy = new Creature(creature.getName(), creature.getHealth(), creature.getBaseDamage(),
+                        creature.getSpeed(), creature.getSpecial(), creature.getType());
                 copy.setArmy(this.army2);
                 this.army2.addCreature(copy);
             }
 
-            this.battle = new Battle(this.army1, this.army2);
-
+            this.battle = new Battle(this.army1, this.army2, random);
             Army winner = this.battle.fight();
 
             if (winner.getName().equals("Army1")) {
@@ -44,25 +41,26 @@ public class Simulation {
                 army2W++;
             }
         }
+
         int totalBattles = army1W + army2W;
         double army1WinPercentage = (totalBattles == 0) ? 0 : ((double) army1W / totalBattles) * 100;
         double army2WinPercentage = (totalBattles == 0) ? 0 : ((double) army2W / totalBattles) * 100;
 
         System.out.println("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("\n\t\torg.davidhlavacek.WarSim.Army 1: " + army1W + " wins | " + String.format("%.2f", army1WinPercentage) + "%");
-        System.out.println("\t\torg.davidhlavacek.WarSim.Army 2: " + army2W + " wins | " + String.format("%.2f", army2WinPercentage) + "%");
+        System.out.println("\n\t\tArmy 1: " + army1W + " wins | " + String.format("%.2f", army1WinPercentage) + "%");
+        System.out.println("\t\tArmy 2: " + army2W + " wins | " + String.format("%.2f", army2WinPercentage) + "%");
 
         if (army1W > army2W) {
-            System.out.println("\t\tAverage HP org.davidhlavacek.WarSim.Army 1: "
-                    + String.format("%.2f", calculateAverageArmyHealthRemaining(army1.getCreatures())) + " HP");
+            System.out.println(
+                    "\t\tAverage HP Army 1: " + String.format("%.2f", calculateAverageArmyHealthRemaining(army1.getCreatures())) + " HP");
         } else {
-            System.out.println("\t\tAverage HP org.davidhlavacek.WarSim.Army 2: "
-                    + String.format("%.2f", calculateAverageArmyHealthRemaining(army2.getCreatures())) + " HP");
+            System.out.println(
+                    "\t\tAverage HP Army 2: " + String.format("%.2f", calculateAverageArmyHealthRemaining(army2.getCreatures())) + " HP");
         }
-        System.out.println("\t\tUltimate Winner:");
-        System.out.println("\n\t\t    " + ((army1W > army2W) ? "org.davidhlavacek.WarSim.Army 1" : "org.davidhlavacek.WarSim.Army 2"));
-        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++\n\n\n");
 
+        System.out.println("\t\tUltimate Winner:");
+        System.out.println("\n\t\t    " + ((army1W > army2W) ? "Army 1" : "Army 2"));
+        System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++\n\n\n");
     }
 
     public static void clearScreen() {
@@ -86,7 +84,7 @@ public class Simulation {
         System.out.printf("\n%7s %25s %10s %10s %10s %10s", "|Type|", "|Name|", "|HP|", "|DMG|", "|SPD|", "|POW|\n");
         for (Creature creature : array) {
             System.out.format("%7s %25s %10s %10s %10s %10s", i++, creature.getName(), creature.getHealth(),
-                    creature.getDamage(), creature.getSpeed(), creature.getSpecial());
+                    creature.getBaseDamage(), creature.getSpeed(), creature.getSpecial());
             System.out.println();
         }
     }
@@ -126,9 +124,8 @@ public class Simulation {
     }
 
     public static void main(String[] args) {
-
         Scanner getInput = new Scanner(System.in);
-        ArrayList<Creature> inputCreatures = new ArrayList<Creature>();
+        ArrayList<Creature> inputCreatures = new ArrayList<>();
 
         clearScreen();
         int numOfTypes = 0;
@@ -240,8 +237,7 @@ public class Simulation {
                     System.out.println("Invalid input. Please enter a number between 0 and 4.");
                 }
             }
-            Creature inputCreature = new Creature(creatureName, creatureHealth, creatureDamage, creatureSpeed,
-                    creatureSpecial);
+            Creature inputCreature = new Creature(creatureName, creatureHealth, creatureDamage, creatureSpeed, creatureSpecial);
             inputCreature.setType(i + 1);
             inputCreatures.add(inputCreature);
         }
@@ -292,7 +288,6 @@ public class Simulation {
                     }
 
                     if (choiceType <= 0 || choiceType >= numOfTypes + 1) {
-                        ;
                         continue;
                     }
 
@@ -400,14 +395,14 @@ public class Simulation {
         clearScreen();
         displayOverview(army1, inputCreatures);
         displayOverview(army2, inputCreatures);
-        System.out.print("\033[80;0HPress  ENTER  to continue... ");
+        System.out.print("\033[100;0HPress  ENTER  to continue... ");
         getInput.nextLine();
 
         while (true) {
             clearScreen();
             System.out.print("\n\n\n\n\n\t\t!BATTLE READY!");
-            System.out.print("\n\n1. Fight\n2. Simulate\n3. Exit");
-            System.out.print("\033[80;0H~$> Choice: ");
+            System.out.print("\n\n1. Simulate\n2. Exit");
+            System.out.print("\033[100;0H~$> Choice: ");
 
             int choice = 0;
 
@@ -420,16 +415,9 @@ public class Simulation {
 
             switch (choice) {
                 case 1:
-                    Battle battlee = new Battle(army1, army2);
+                    Battle battleee = new Battle(army1, army2, new Random(System.currentTimeMillis()));
                     clearScreen();
-                    battlee.fight();
-                    System.out.print("\033[80;0HPress  ENTER  to continue... ");
-                    getInput.nextLine();
-                    break;
-                case 2:
-                    Battle battleee = new Battle(army1, army2);
-                    clearScreen();
-                    System.out.print("\033[80;0H~$> Number of Simulations: ");
+                    System.out.print("\033[100;0H~$> Number of Simulations: ");
 
                     int choiceSimulation = 0;
 
@@ -441,10 +429,10 @@ public class Simulation {
                     }
 
                     Simulation simulation = new Simulation(battleee, choiceSimulation);
-                    System.out.print("\033[80;0HPress  ENTER  to continue... ");
+                    System.out.print("\033[100;0HPress  ENTER  to continue... ");
                     getInput.nextLine();
                     break;
-                case 3:
+                case 2:
                     // User chose to exit
                     System.exit(0);
                     break;
@@ -453,37 +441,6 @@ public class Simulation {
                     break;
             }
         }
-
-        /*
-         * SPECIALS
-         * 0. None
-         * 1. Reflect 10% of dmg taken back
-         * 2. Every 5th round increase your dmg by 20%
-         * 3. Every 5th round become invincible
-         * 4. Heal for 5% of dmg done
-         */
-
-        // org.davidhlavacek.WarSim.Creature creature1 = new org.davidhlavacek.WarSim.Creature("Tank", 3000, 100, 1, 3);
-        // org.davidhlavacek.WarSim.Creature creature2 = new org.davidhlavacek.WarSim.Creature("Mage", 250, 500, 3, 4);
-        // org.davidhlavacek.WarSim.Creature creature3 = new org.davidhlavacek.WarSim.Creature("Warrior", 500, 250, 3, 2);
-        // org.davidhlavacek.WarSim.Creature creature4 = new org.davidhlavacek.WarSim.Creature("Turret", 5000, 10, 1, 1);
-
-        // org.davidhlavacek.WarSim.Army army1 = new org.davidhlavacek.WarSim.Army("Army1");
-        // org.davidhlavacek.WarSim.Army army2 = new org.davidhlavacek.WarSim.Army("Army2");
-
-        // army1.addCreature(creature1, 5);
-        // army1.addCreature(creature3, 20);
-        // army1.addCreature(creature4, 1);
-
-        // army2.addCreature(creature1, 5);
-        // army2.addCreature(creature2, 20);
-        // army2.addCreature(creature4, 1);
-
-        // org.davidhlavacek.WarSim.Battle battle = new org.davidhlavacek.WarSim.Battle(army1, army2);
-
-        // int simulations = Integer.parseInt(args[0]);
-        // org.davidhlavacek.WarSim.Simulation simulation = new org.davidhlavacek.WarSim.Simulation(battle, simulations);
-
     }
-
 }
+

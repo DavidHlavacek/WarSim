@@ -44,7 +44,7 @@ public class Army {
     public void addCreature(Creature creature, int copies) {
         for (int x = 0; x < copies; x++) {
             Creature shallowCopy = new Creature(creature.getName(), creature.getHealth(),
-                    creature.getDamage(), creature.getSpeed(), creature.getSpecial(), creature.getType());
+                    creature.getBaseDamage(), creature.getSpeed(), creature.getSpecial(), creature.getType());
             shallowCopy.setArmy(this);
             this.creatures.add(shallowCopy);
         }

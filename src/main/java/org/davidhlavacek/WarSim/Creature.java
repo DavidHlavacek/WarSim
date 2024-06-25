@@ -7,7 +7,7 @@ public class Creature {
     private String name;
     private int max_health;
     private int health;
-    private int damage;
+    private int base_damage;
     private int speed;
     private int special;
     private Army army;
@@ -15,31 +15,29 @@ public class Creature {
     private Random random;
     private Creature enemy; // Add a field to store the enemy
 
-
     // Constructor
-    public Creature(String name, int health, int damage, int speed, int special) {
+    public Creature(String name, int health, int base_damage, int speed, int special) {
         this.name = name;
         this.max_health = health;
         this.health = health;
-        this.damage = damage;
+        this.base_damage = base_damage;
         this.speed = speed;
         this.special = special;
         this.army = null;
         this.type = Simulation.type++;
-
+        this.random = new Random(System.currentTimeMillis());
     }
 
-    public Creature(String name, int health, int damage, int speed, int special, int type) {
+    public Creature(String name, int health, int base_damage, int speed, int special, int type) {
         this.name = name;
         this.max_health = health;
         this.health = health;
-        this.damage = damage;
+        this.base_damage = base_damage;
         this.speed = speed;
         this.special = special;
         this.army = null;
-        this.type = type++;
-        this.random = new Random();
-        randomizeStats(5);
+        this.type = type;
+        this.random = new Random(System.currentTimeMillis());
     }
 
     // Getters
@@ -59,8 +57,8 @@ public class Creature {
         return this.max_health;
     }
 
-    public int getDamage() {
-        return this.damage;
+    public int getBaseDamage() {
+        return this.base_damage;
     }
 
     public int getSpeed() {
@@ -100,8 +98,8 @@ public class Creature {
         return false;
     }
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+    public void setBaseDamage(int base_damage) {
+        this.base_damage = base_damage;
     }
 
     public void setSpeed(int speed) {
@@ -118,39 +116,23 @@ public class Creature {
 
     // Methods
 
-    private void randomizeStats(int chance) {
-        // 1 in 'chance' chance to randomize each stat
-        if (random.nextInt(chance) == 0) {
-            this.health = Math.max(1, max_health + random.nextInt(101) - 50);
-            // Randomize health within the range [max_health - 50, max_health + 50], but ensure it's at least 1
-        }
-
-        if (random.nextInt(chance) == 0) {
-            this.damage = Math.max(1, damage + random.nextInt(101) - 50);
-            // Randomize damage within the range [damage - 50, damage + 50], but ensure it's at least 1
-        }
-
-        if (random.nextInt(chance) == 0) {
-            this.speed = Math.max(1, speed + random.nextInt(11) - 5);
-            // Randomize speed within the range [speed - 5, speed + 5], but ensure it's at least 1
-        }
-
-        if (random.nextInt(10) == 0) {
-            this.special = random.nextInt(5); // Randomize the ability to a value between 0 and 4
+    private int calculateDamage() {
+        if (this.base_damage > 10) {
+            return base_damage + random.nextInt((base_damage / 10) * 2 + 1) - (base_damage / 10);
+        } else {
+            return base_damage + random.nextInt(5) - 2; // Adjust this range as needed
         }
     }
-
 
     public void takeDamage(int damage) {
         this.setHealth(this.getHealth() - damage);
     }
 
     public void attackEnemyCreature(Creature enemyCreature, int specialChange) {
-        enemyCreature.takeDamage(this.getDamage() + specialChange);
+        enemyCreature.takeDamage(this.calculateDamage() + specialChange);
     }
 
     public void die() {
         this.army.getCreatures().remove(this);
     }
-
 }
