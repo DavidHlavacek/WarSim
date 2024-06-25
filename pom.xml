@@ -6,7 +6,7 @@
 
     <groupId>org.davidhlavacek.WarSim</groupId>
     <artifactId>WarSim</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -53,9 +53,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                            <mainClass>org.davidhlavacek.WarSim.Simulation</mainClass>
+                            <mainClass>Simulation</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
