@@ -6,7 +6,6 @@
 
     <groupId>org.davidhlavacek.WarSim</groupId>
     <artifactId>WarSim</artifactId>
-    <version>WarSim</version>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
