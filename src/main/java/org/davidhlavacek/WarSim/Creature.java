@@ -1,3 +1,5 @@
+package org.davidhlavacek.WarSim;
+
 import java.util.*;
 
 public class Creature {

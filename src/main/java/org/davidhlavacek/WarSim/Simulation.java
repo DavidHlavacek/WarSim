@@ -1,3 +1,5 @@
+package org.davidhlavacek.WarSim;
+
 import java.util.*;
 
 public class Simulation {
@@ -47,18 +49,18 @@ public class Simulation {
         double army2WinPercentage = (totalBattles == 0) ? 0 : ((double) army2W / totalBattles) * 100;
 
         System.out.println("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("\n\t\tArmy 1: " + army1W + " wins | " + String.format("%.2f", army1WinPercentage) + "%");
-        System.out.println("\t\tArmy 2: " + army2W + " wins | " + String.format("%.2f", army2WinPercentage) + "%");
+        System.out.println("\n\t\torg.davidhlavacek.WarSim.Army 1: " + army1W + " wins | " + String.format("%.2f", army1WinPercentage) + "%");
+        System.out.println("\t\torg.davidhlavacek.WarSim.Army 2: " + army2W + " wins | " + String.format("%.2f", army2WinPercentage) + "%");
 
         if (army1W > army2W) {
-            System.out.println("\t\tAverage HP Army 1: "
+            System.out.println("\t\tAverage HP org.davidhlavacek.WarSim.Army 1: "
                     + String.format("%.2f", calculateAverageArmyHealthRemaining(army1.getCreatures())) + " HP");
         } else {
-            System.out.println("\t\tAverage HP Army 2: "
+            System.out.println("\t\tAverage HP org.davidhlavacek.WarSim.Army 2: "
                     + String.format("%.2f", calculateAverageArmyHealthRemaining(army2.getCreatures())) + " HP");
         }
         System.out.println("\t\tUltimate Winner:");
-        System.out.println("\n\t\t    " + ((army1W > army2W) ? "Army 1" : "Army 2"));
+        System.out.println("\n\t\t    " + ((army1W > army2W) ? "org.davidhlavacek.WarSim.Army 1" : "org.davidhlavacek.WarSim.Army 2"));
         System.out.println("\n+++++++++++++++++++++++++++++++++++++++++++\n\n\n");
 
     }
@@ -461,13 +463,13 @@ public class Simulation {
          * 4. Heal for 5% of dmg done
          */
 
-        // Creature creature1 = new Creature("Tank", 3000, 100, 1, 3);
-        // Creature creature2 = new Creature("Mage", 250, 500, 3, 4);
-        // Creature creature3 = new Creature("Warrior", 500, 250, 3, 2);
-        // Creature creature4 = new Creature("Turret", 5000, 10, 1, 1);
+        // org.davidhlavacek.WarSim.Creature creature1 = new org.davidhlavacek.WarSim.Creature("Tank", 3000, 100, 1, 3);
+        // org.davidhlavacek.WarSim.Creature creature2 = new org.davidhlavacek.WarSim.Creature("Mage", 250, 500, 3, 4);
+        // org.davidhlavacek.WarSim.Creature creature3 = new org.davidhlavacek.WarSim.Creature("Warrior", 500, 250, 3, 2);
+        // org.davidhlavacek.WarSim.Creature creature4 = new org.davidhlavacek.WarSim.Creature("Turret", 5000, 10, 1, 1);
 
-        // Army army1 = new Army("Army1");
-        // Army army2 = new Army("Army2");
+        // org.davidhlavacek.WarSim.Army army1 = new org.davidhlavacek.WarSim.Army("Army1");
+        // org.davidhlavacek.WarSim.Army army2 = new org.davidhlavacek.WarSim.Army("Army2");
 
         // army1.addCreature(creature1, 5);
         // army1.addCreature(creature3, 20);
@@ -477,10 +479,10 @@ public class Simulation {
         // army2.addCreature(creature2, 20);
         // army2.addCreature(creature4, 1);
 
-        // Battle battle = new Battle(army1, army2);
+        // org.davidhlavacek.WarSim.Battle battle = new org.davidhlavacek.WarSim.Battle(army1, army2);
 
         // int simulations = Integer.parseInt(args[0]);
-        // Simulation simulation = new Simulation(battle, simulations);
+        // org.davidhlavacek.WarSim.Simulation simulation = new org.davidhlavacek.WarSim.Simulation(battle, simulations);
 
     }
 

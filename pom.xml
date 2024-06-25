@@ -53,7 +53,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Simulation</mainClass>
+                            <mainClass>org.davidhlavacek.WarSim.Simulation</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

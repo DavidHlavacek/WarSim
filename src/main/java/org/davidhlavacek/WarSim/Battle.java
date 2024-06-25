@@ -1,3 +1,5 @@
+package org.davidhlavacek.WarSim;
+
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -105,8 +107,8 @@ public class Battle {
     public void duel(Creature first, Creature second) {
         // Log information about the start of the duel
         // LOGGER.info("Start round: " + this.rounds);
-        // logCreatureStats("First Creature", first);
-        // logCreatureStats("Second Creature", second);
+        // logCreatureStats("First org.davidhlavacek.WarSim.Creature", first);
+        // logCreatureStats("Second org.davidhlavacek.WarSim.Creature", second);
         // logCreatureStats("Initial Stats", first, second);
 
         // Check if it's the 5th round and the first creature has special ability 3
@@ -222,7 +224,7 @@ public class Battle {
 
         }
         Army winner = (army1.getSize() > army2.getSize()) ? army1 : army2;
-        System.out.println("\n\n------------" + "Simulation " + Simulation.simulation++ + "------------\n");
+        System.out.println("\n\n------------" + "org.davidhlavacek.WarSim.Simulation " + Simulation.simulation++ + "------------\n");
         System.out.println("\tWinner: " + winner.getName());
         System.out.println("\tRounds: " + this.getRounds());
         int count = 0;
