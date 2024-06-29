@@ -12,6 +12,14 @@ This project simulates epic battles between two armies composed of customizable 
 ## GitHub Actions 🚀
 This project uses GitHub Actions to automate the build and release process. On every push to the main branch, the project is built using Maven, and the resulting JAR file is published as a release. 🚀
 
+## Prerequisites 📋
+Before running the War Simulator project, ensure you have the following prerequisites installed on your system:
+
+1. **Java Development Kit (JDK)**:
+   
+   - Install JDK to compile and run Java applications.
+   - **Download Link**: [Oracle JDK](https://www.oracle.com/java/technologies/javase-downloads.html) or [OpenJDK](https://adoptopenjdk.net/)
+
 ## Setup and Running 🛠️
 1. Download the latest JAR file from the [Releases](https://github.com/DavidHlavacek/War_Simulation/releases) section.
 2. Open a terminal or command prompt.
