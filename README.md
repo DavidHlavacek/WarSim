@@ -21,7 +21,7 @@ Before running the War Simulator project, ensure you have the following prerequi
    - **Download Link**: [Oracle JDK](https://www.oracle.com/java/technologies/javase-downloads.html) or [OpenJDK](https://adoptopenjdk.net/)
 
 ## Setup and Running 🛠️
-1. Download the latest JAR file from the [Releases](https://github.com/DavidHlavacek/War_Simulation/releases) section.
+1. Download the latest JAR file from the [Releases](https://github.com/DavidHlavacek/WarSim/releases) section.
 2. Open a terminal or command prompt.
 3. Navigate to the directory where the JAR file is located.
 4. Run the JAR file using the following command:
